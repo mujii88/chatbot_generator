@@ -6,6 +6,15 @@ from app.db.db_config import get_db
 from app.db.models import User, Chatbot, APIKey, UserSession
 from app.services.auth_service import AuthService
 import json
+from fastapi import UploadFile, File, Form
+from datetime import datetime
+from app.api.schemas import (
+    CreateChatbotRequest,
+    CreateChatbotResponse,
+    ChatRequest,
+    ChatResponse,
+    BusinessInfo,
+)
 
 router = APIRouter()
 
@@ -289,3 +298,80 @@ async def get_db_status(db: AsyncSession = Depends(get_db)):
             "status": "error",
             "error": str(e)
         }
+
+
+# Frontend expected endpoints
+
+@router.post("/chatbot/create", response_model=CreateChatbotResponse)
+async def create_chatbot(
+    # Support both multipart and JSON by using Form/UploadFile as optional, fallback to body parse
+    name: Optional[str] = Form(None),
+    description: Optional[str] = Form(None),
+    website_url: Optional[str] = Form(None),
+    tone: Optional[str] = Form(None),
+    faqs: Optional[str] = Form(None),  # JSON string if multipart
+    knowledge_files: Optional[List[UploadFile]] = None,
+    db: AsyncSession = Depends(get_db)
+):
+    # If name is None, assume JSON body
+    if name is None:
+        # FastAPI will already have parsed JSON body into request state; re-declare endpoint if needed
+        raise HTTPException(status_code=415, detail="Only multipart/form-data supported for now")
+
+    # Create a minimal chatbot owned by the first user (demo). In real app, supply owner_id
+    # Find any user to own the bot (for demo). In real scenario, you'd use auth user id.
+    result = await db.execute(select(User))
+    owner = result.scalars().first()
+    if not owner:
+        raise HTTPException(status_code=400, detail="No user exists to own the chatbot")
+
+    chatbot = Chatbot(
+        name=name,
+        owner_id=owner.id,
+        llm_endpoint_url=None,
+        chatbot_config={
+            "name": name,
+            "description": description,
+            "website_url": website_url,
+            "tone": tone,
+            "faqs": json.loads(faqs) if faqs else [],
+            "bot_display_name": name,
+        },
+    )
+    db.add(chatbot)
+    await db.commit()
+    await db.refresh(chatbot)
+
+    response: CreateChatbotResponse = CreateChatbotResponse(
+        chatbot_id=chatbot.id,
+        embed_script_url=f"{website_url or ''}/widget.js" if website_url else "/widget.js",
+        created_at=datetime.utcnow().isoformat(),
+        config=BusinessInfo(
+            name=name,
+            description=description or "",
+            website_url=website_url,
+            tone=tone or "friendly",
+            faqs=json.loads(faqs) if faqs else [],
+            bot_display_name=name,
+        ),
+    )
+    return response
+
+
+@router.post("/chatbot/respond", response_model=ChatResponse)
+async def chatbot_respond(payload: ChatRequest, db: AsyncSession = Depends(get_db)):
+    # Validate chatbot exists
+    result = await db.execute(select(Chatbot).where(Chatbot.id == payload.chatbot_id))
+    chatbot = result.scalar_one_or_none()
+    if not chatbot:
+        raise HTTPException(status_code=404, detail="Chatbot not found")
+
+    # For now, return a placeholder response. LLM team will replace.
+    text = payload.message.strip()
+    if not text:
+        return ChatResponse(reply="Please enter a message.")
+
+    if "hello" in text.lower():
+        return ChatResponse(reply=f"Hello! I'm {chatbot.name}. How can I help you today?")
+
+    return ChatResponse(reply=f"You said: {payload.message}")

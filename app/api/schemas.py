@@ -53,3 +53,45 @@ class DatabaseStatus(BaseModel):
     status: str
     tables: dict
     error: Optional[str] = None 
+
+
+# Frontend-aligned schemas
+class FAQ(BaseModel):
+    q: str
+    a: str
+
+
+class BusinessInfo(BaseModel):
+    name: str
+    description: str
+    website_url: Optional[str] = None
+    tone: str
+    faqs: List[FAQ]
+    bot_display_name: Optional[str] = None
+
+
+class CreateChatbotRequest(BaseModel):
+    name: str
+    description: str
+    website_url: Optional[str] = None
+    tone: str
+    faqs: List[FAQ]
+
+
+class CreateChatbotResponse(BaseModel):
+    chatbot_id: str
+    embed_script_url: str
+    created_at: str
+    config: BusinessInfo
+
+
+class ChatRequest(BaseModel):
+    chatbot_id: str
+    message: str
+
+
+class ChatResponse(BaseModel):
+    reply: str
+    class Meta(BaseModel):
+        confidence: Optional[float] = None
+    meta: Optional[Meta] = None
