@@ -172,4 +172,4 @@ curl http://localhost:8000/chatbots
 5. **Testing**: Add unit and integration tests
 6. **Logging**: Add proper logging configuration
 7. **Rate Limiting**: Implement API rate limiting
-8. **Documentation**: Add more detailed API documentation 
+8. **Documentation**: Add more detailed API documentation # chatbot_generator
