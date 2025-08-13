@@ -1,0 +1,13 @@
+﻿chatbot_generator/myvenv/
+**/__pycache__/
+*.py[cod]
+.env
+.venv/
+.vscode/
+.idea/
+.pytest_cache/
+.mypy_cache/
+*.sqlite3
+dev.db
+.DS_Store
+.coverage
