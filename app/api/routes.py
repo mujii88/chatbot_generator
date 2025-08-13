@@ -6,6 +6,8 @@ from app.db.db_config import get_db
 from app.db.models import User, Chatbot, APIKey, UserSession
 from app.services.auth_service import AuthService
 import json
+import google.generativeai as genai
+import os
 from fastapi import UploadFile, File, Form
 from datetime import datetime
 from app.api.schemas import (
@@ -360,18 +362,48 @@ async def create_chatbot(
 
 @router.post("/chatbot/respond", response_model=ChatResponse)
 async def chatbot_respond(payload: ChatRequest, db: AsyncSession = Depends(get_db)):
-    # Validate chatbot exists
-    result = await db.execute(select(Chatbot).where(Chatbot.id == payload.chatbot_id))
-    chatbot = result.scalar_one_or_none()
-    if not chatbot:
-        raise HTTPException(status_code=404, detail="Chatbot not found")
+        # Validate chatbot exists
+        result = await db.execute(select(Chatbot).where(Chatbot.id == payload.chatbot_id))
+        chatbot = result.scalar_one_or_none()
+        if not chatbot:
+            raise HTTPException(status_code=404, detail="Chatbot not found")
 
-    # For now, return a placeholder response. LLM team will replace.
-    text = payload.message.strip()
-    if not text:
-        return ChatResponse(reply="Please enter a message.")
+        # Validate message
+        text = payload.message.strip()
+        if not text:
+            return ChatResponse(reply="Please enter a message.")
 
-    if "hello" in text.lower():
-        return ChatResponse(reply=f"Hello! I'm {chatbot.name}. How can I help you today?")
+        # Configure Gemini
+        genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+        model = genai.GenerativeModel('gemini-2.5-flash')
 
-    return ChatResponse(reply=f"You said: {payload.message}")
+        # Build prompt using chatbot config
+        config = chatbot.chatbot_config or {}
+        business_name = config.get("name", chatbot.name)
+        description = config.get("description", "")
+        tone = config.get("tone", "friendly")
+        faqs = config.get("faqs", [])
+
+        # Create FAQ context
+        faq_text = ""
+        if faqs:
+            faq_text = "\nFrequently Asked Questions:\n"
+            for faq in faqs:
+                if isinstance(faq, dict):
+                    faq_text += f"Q: {faq.get('q', '')}\nA: {faq.get('a', '')}\n"
+
+        # Create context prompt
+        prompt = f"""You are a helpful chatbot for {business_name}.
+    Business Description: {description}
+    Tone: Please respond in a {tone} manner.
+    {faq_text}
+
+    User message: {text}
+
+    Please provide a helpful response based on the business information above."""
+
+        try:
+            response = model.generate_content(prompt)
+            return ChatResponse(reply=response.text)
+        except Exception as e:
+            return ChatResponse(reply="I'm sorry, I'm having trouble responding right now. Please try again later.")
