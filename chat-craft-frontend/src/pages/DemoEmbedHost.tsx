@@ -14,13 +14,15 @@ const DemoEmbedHost: React.FC = () => {
   const [isWidgetLoaded, setIsWidgetLoaded] = useState(false)
   const chatbotId = searchParams.get('id') || 'demo-123'
   const isEmbedded = searchParams.get('embedded') === 'true'
+  const apiBaseUrl = 'http://localhost:8000' // Backend API URL
 
   useEffect(() => {
-    // Dynamically load the widget script
+    // Dynamically load the widget script from backend
     const script = document.createElement('script')
-    script.src = '/widget.js'
+    script.src = `${apiBaseUrl}/widget.js`
     script.setAttribute('data-chatbot-id', chatbotId)
     script.onload = () => setIsWidgetLoaded(true)
+    script.onerror = () => console.error('Failed to load widget script')
     document.body.appendChild(script)
 
     return () => {
@@ -35,7 +37,7 @@ const DemoEmbedHost: React.FC = () => {
         widget.remove()
       }
     }
-  }, [chatbotId])
+  }, [chatbotId, apiBaseUrl])
 
   if (isEmbedded) {
     // Minimal embedded view
@@ -161,7 +163,7 @@ const DemoEmbedHost: React.FC = () => {
               <CardContent>
                 <pre className="bg-muted p-3 rounded text-xs overflow-x-auto">
 {`<script 
-  src="/widget.js" 
+  src="${apiBaseUrl}/widget.js" 
   data-chatbot-id="${chatbotId}">
 </script>`}
                 </pre>

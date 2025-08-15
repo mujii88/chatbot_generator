@@ -5,7 +5,6 @@ import React, { useState } from 'react'
 import Layout from '@/components/Layout'
 import BusinessForm from '@/components/BusinessForm'
 import EmbedCodeCard from '@/components/EmbedCodeCard'
-import WidgetPreview from '@/components/WidgetPreview'
 import { useCreateChatbot } from '@/hooks/useCreateChatbot'
 import { getErrorMessage } from '@/services/api'
 import type { CreateChatbotRequest, CreateChatbotResponse } from '@/types'
@@ -119,7 +118,6 @@ const CreateBotPage: React.FC = () => {
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <EmbedCodeCard chatbotData={chatbotData} />
-              <WidgetPreview chatbotId={chatbotData.chatbot_id} />
             </div>
           </div>
         )}
