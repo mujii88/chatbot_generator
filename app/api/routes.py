@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Header
+from fastapi import APIRouter, Depends, HTTPException, status, Header, Body
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from typing import List, Optional, Dict, Any
@@ -8,6 +8,7 @@ from app.services.auth_service import AuthService
 import json
 from fastapi import UploadFile, File, Form, Request
 from datetime import datetime
+from fastapi import Request
 from app.api.schemas import (
     CreateChatbotRequest,
     CreateChatbotResponse,
@@ -147,7 +148,7 @@ async def get_user_context(user_id: str, db: AsyncSession = Depends(get_db)):
 @router.post("/users/{user_id}/context")
 async def update_user_context(
     user_id: str,
-    context_data: str,
+    context_data: str = Body(...),
     db: AsyncSession = Depends(get_db)
 ):
     """Update conversation context"""
@@ -353,9 +354,13 @@ async def create_chatbot(
     await db.commit()
     await db.refresh(chatbot)
 
+    # Compute embed script URL from request host if possible
+    base_url = str(request.base_url).rstrip("/") if request else ""
+    script_host = base_url if base_url else ""
+
     response: CreateChatbotResponse = CreateChatbotResponse(
         chatbot_id=chatbot.id,
-        embed_script_url=f"{website_url or ''}/widget.js" if website_url else "/widget.js",
+        embed_script_url=f"{script_host}/widget.js",
         created_at=datetime.utcnow().isoformat(),
         config=BusinessInfo(
             name=name,
