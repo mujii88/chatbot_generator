@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Widget Test Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .success { border-color: #4CAF50; background-color: #f1f8e9; }
+        .info { border-color: #2196F3; background-color: #e3f2fd; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Chatbot Widget Test Page</h1>
+    
+    <div class="test-section info">
+        <h2>Test Information</h2>
+        <p>This page tests the chatbot widget functionality. The widget should appear as a floating chat button in the bottom-right corner.</p>
+        <p><strong>Expected Behavior:</strong></p>
+        <ul>
+            <li>✅ Floating chat button appears in bottom-right corner</li>
+            <li>✅ Clicking the button opens the chat interface</li>
+            <li>✅ Chat interface shows business information</li>
+            <li>✅ User can type messages and get responses</li>
+        </ul>
+    </div>
+
+    <div class="test-section success">
+        <h2>✅ Backend Status</h2>
+        <p>Backend is running at: <code>http://localhost:8000</code></p>
+        <p>Widget script is accessible at: <code>http://localhost:8000/widget.js</code></p>
+    </div>
+
+    <div class="test-section">
+        <h2>Test Content</h2>
+        <p>This is some test content to verify the page is working. Scroll down to see more content and test the widget's positioning.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    </div>
+
+    <div class="test-section">
+        <h2>More Test Content</h2>
+        <p>Adding more content to test scrolling and widget positioning.</p>
+        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+        <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+    </div>
+
+    <div class="test-section">
+        <h2>Final Test Section</h2>
+        <p>This is the final section to ensure the page has enough content for proper testing.</p>
+        <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.</p>
+    </div>
+
+    <!-- Widget Script - This should load the chatbot widget -->
+    <script src="http://localhost:8000/widget.js"></script>
+    
+    <script>
+        // Test script to verify the widget loaded
+        setTimeout(() => {
+            console.log('🔍 Checking if widget loaded...');
+            const widgetElements = document.querySelectorAll('[id*="chatbot"], [class*="chatbot"], [id*="widget"], [class*="widget"]');
+            console.log('Found widget elements:', widgetElements.length);
+            
+            if (widgetElements.length > 0) {
+                console.log('✅ Widget appears to be loaded');
+                document.body.style.border = '3px solid #4CAF50';
+            } else {
+                console.log('❌ No widget elements found');
+                document.body.style.border = '3px solid #f44336';
+            }
+        }, 2000);
+    </script>
+</body>
+</html>

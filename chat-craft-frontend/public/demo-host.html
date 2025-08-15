@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Widget Demo - Host Page</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .content {
+            padding: 30px;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .highlight {
+            background: #f3f4f6;
+            border-left: 4px solid #8b5cf6;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .code {
+            background: #1f2937;
+            color: #f9fafb;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+        .badge {
+            display: inline-block;
+            background: #8b5cf6;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="status" id="widget-status">
+        🔄 Loading widget...
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>🤖 Chatbot Widget Demo</h1>
+            <p>Experience your chatbot widget on a real website</p>
+            <span class="badge">Live Demo Environment</span>
+        </div>
+
+        <div class="content">
+            <div class="section">
+                <h2>Welcome to ABC Company</h2>
+                <p>This is a sample business website demonstrating how the chatbot widget integrates seamlessly with any website. The floating chat button will appear in the bottom-right corner.</p>
+                
+                <div class="highlight">
+                    <strong>💡 Try the chatbot!</strong> Click the floating chat button and ask questions like:
+                    <ul>
+                        <li>"What are your business hours?"</li>
+                        <li>"Do you offer shipping?"</li>
+                        <li>"What products do you sell?"</li>
+                        <li>"How can I contact support?"</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>About Our Business</h3>
+                <p>We're a modern company focused on providing excellent customer service. Our AI-powered chatbot is available 24/7 to answer your questions and help you find what you need.</p>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 20px 0;">
+                    <div style="padding: 20px; background: #f8fafc; border-radius: 8px; text-align: center;">
+                        <div style="width: 60px; height: 60px; background: #8b5cf6; border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px;">📦</div>
+                        <h4 style="margin: 10px 0 5px;">Products</h4>
+                        <p style="font-size: 14px; color: #6b7280; margin: 0;">High-quality items for all your needs</p>
+                    </div>
+                    <div style="padding: 20px; background: #f8fafc; border-radius: 8px; text-align: center;">
+                        <div style="width: 60px; height: 60px; background: #8b5cf6; border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px;">🚚</div>
+                        <h4 style="margin: 10px 0 5px;">Shipping</h4>
+                        <p style="font-size: 14px; color: #6b7280; margin: 0;">Fast delivery worldwide</p>
+                    </div>
+                    <div style="padding: 20px; background: #f8fafc; border-radius: 8px; text-align: center;">
+                        <div style="width: 60px; height: 60px; background: #8b5cf6; border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-color: center; color: white; font-size: 24px;">💬</div>
+                        <h4 style="margin: 10px 0 5px;">Support</h4>
+                        <p style="font-size: 14px; color: #6b7280; margin: 0;">24/7 AI-powered assistance</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>How to Embed</h3>
+                <p>Adding this chatbot to your website is simple. Just copy and paste this code:</p>
+                
+                <div class="code">
+&lt;script src="https://your-api.com/widget.js" data-chatbot-id="your-chatbot-id"&gt;&lt;/script&gt;
+                </div>
+                
+                <p style="font-size: 14px; color: #6b7280; margin-top: 10px;">
+                    Replace <code>your-api.com</code> with your actual API domain and <code>your-chatbot-id</code> with your unique chatbot ID.
+                </p>
+            </div>
+
+            <div class="section">
+                <h3>Features</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                    <div style="padding: 15px; border: 1px solid #e5e7eb; border-radius: 8px;">
+                        <h4 style="margin: 0 0 8px; color: #8b5cf6;">⚡ Instant Responses</h4>
+                        <p style="margin: 0; font-size: 14px; color: #6b7280;">Get immediate answers based on your business knowledge</p>
+                    </div>
+                    <div style="padding: 15px; border: 1px solid #e5e7eb; border-radius: 8px;">
+                        <h4 style="margin: 0 0 8px; color: #8b5cf6;">📱 Mobile Friendly</h4>
+                        <p style="margin: 0; font-size: 14px; color: #6b7280;">Works perfectly on all devices and screen sizes</p>
+                    </div>
+                    <div style="padding: 15px; border: 1px solid #e5e7eb; border-radius: 8px;">
+                        <h4 style="margin: 0 0 8px; color: #8b5cf6;">🎨 Customizable</h4>
+                        <p style="margin: 0; font-size: 14px; color: #6b7280;">Matches your brand colors and personality</p>
+                    </div>
+                    <div style="padding: 15px; border: 1px solid #e5e7eb; border-radius: 8px;">
+                        <h4 style="margin: 0 0 8px; color: #8b5cf6;">🔒 Secure</h4>
+                        <p style="margin: 0; font-size: 14px; color: #6b7280;">Built with privacy and security in mind</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chatbot Widget Embed Code -->
+    <script src="/widget.js" data-chatbot-id="demo-chatbot-123"></script>
+
+    <script>
+        // Update status when widget loads
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                const status = document.getElementById('widget-status');
+                if (status) {
+                    status.innerHTML = '✅ Widget loaded!';
+                    status.style.background = '#10b981';
+                    
+                    // Hide status after 3 seconds
+                    setTimeout(function() {
+                        status.style.opacity = '0';
+                        status.style.transition = 'opacity 0.5s';
+                    }, 3000);
+                }
+            }, 1000);
+        });
+
+        // Add some interactivity to demonstrate normal website behavior
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add click handlers to product cards
+            const cards = document.querySelectorAll('[style*="padding: 20px; background: #f8fafc"]');
+            cards.forEach(card => {
+                card.style.cursor = 'pointer';
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
+                    this.style.transition = 'transform 0.2s';
+                    this.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
+                });
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = 'none';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
